@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Emergency Patient Management System</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="logo-area">
+        <div class="logo-icon">✚</div>
+
+        <div>
+            <h2>EPMS</h2>
+            <span>Emergency Care</span>
+        </div>
+    </div>
+
+    <nav class="navigation">
+
+        <button class="nav-item active"
+                onclick="showSection('dashboard', this)">
+            <span>▣</span>
+            Dashboard
+        </button>
+
+        <button class="nav-item"
+                onclick="showSection('registration', this)">
+            <span>＋</span>
+            Register Patient
+        </button>
+
+        <button class="nav-item"
+                onclick="showSection('patients', this)">
+            <span>♙</span>
+            Patients
+        </button>
+
+        <button class="nav-item"
+                onclick="showSection('priority', this)">
+            <span>⚡</span>
+            Priority Queue
+        </button>
+
+        <button class="nav-item"
+                onclick="showSection('doctors', this)">
+            <span>⚕</span>
+            Doctors
+        </button>
+
+        <button class="nav-item"
+                onclick="showSection('beds', this)">
+            <span>▣</span>
+            Bed Status
+        </button>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+
+            <div>
+                <strong>System Online</strong>
+                <small>Emergency services active</small>
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main-content">
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div>
+            <p class="welcome">Emergency Care Coordination</p>
+            <h1 id="pageTitle">Dashboard</h1>
+        </div>
+
+        <div class="top-actions">
+
+            <div class="live-status">
+                <span></span>
+                LIVE
+            </div>
+
+            <button class="emergency-btn"
+                    onclick="triggerEmergencyAlert()">
+                🚨 Emergency Alert
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= DASHBOARD ================= -->
+
+    <section id="dashboard" class="section active-section">
+
+        <div class="hero">
+
+            <div class="hero-content">
+
+                <span class="hero-label">
+                    SMART EMERGENCY CARE
+                </span>
+
+                <h2>
+                    Emergency Patient
+                    <span>Management System</span>
+                </h2>
+
+                <p>
+                    Smart patient registration, priority management,
+                    doctor assignment and emergency care coordination
+                    in one platform.
+                </p>
+
+                <button class="primary-btn"
+                        onclick="openRegistration()">
+
+                    ＋ Register New Patient
+
+                </button>
+
+            </div>
+
+            <div class="hero-icon">
+                <div class="pulse-ring"></div>
+                🏥
+            </div>
+
+        </div>
+
+
+        <!-- STAT CARDS -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card blue">
+                <div class="stat-icon">♙</div>
+
+                <div>
+                    <span>Total Patients</span>
+                    <strong id="totalPatients">0</strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card red">
+                <div class="stat-icon">🚨</div>
+
+                <div>
+                    <span>Critical Patients</span>
+                    <strong id="criticalPatients">0</strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card purple">
+                <div class="stat-icon">⚕</div>
+
+                <div>
+                    <span>Under Treatment</span>
+                    <strong id="treatmentPatients">0</strong>
+                </div>
+            </div>
+
+
+            <div class="stat-card green">
+                <div class="stat-icon">🛏</div>
+
+                <div>
+                    <span>Available Beds</span>
+                    <strong id="availableBeds">12</strong>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- DASHBOARD GRID -->
+
+        <div class="dashboard-grid">
+
+            <!-- Emergency Queue -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <span class="panel-label">LIVE QUEUE</span>
+                        <h3>Emergency Queue</h3>
+                    </div>
+
+                    <button class="small-btn"
+                            onclick="showSectionByName('priority')">
+                        View All
+                    </button>
+
+                </div>
+
+                <div id="dashboardQueue" class="queue-list">
+
+                    <div class="empty-state">
+                        No patients in emergency queue
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Quick Actions -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <span class="panel-label">QUICK ACTIONS</span>
+                        <h3>Emergency Operations</h3>
+                    </div>
+
+                </div>
+
+                <div class="quick-actions">
+
+                    <button onclick="openRegistration()">
+                        <span>＋</span>
+                        Register Patient
+                    </button>
+
+                    <button onclick="showSectionByName('priority')">
+                        <span>⚡</span>
+                        Priority Queue
+                    </button>
+
+                    <button onclick="showSectionByName('doctors')">
+                        <span>⚕</span>
+                        Doctor Status
+                    </button>
+
+                    <button onclick="showSectionByName('beds')">
+                        <span>🛏</span>
+                        Bed Availability
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RECENT PATIENTS -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-label">RECENT ACTIVITY</span>
+                    <h3>Recent Patients</h3>
+                </div>
+
+                <button class="small-btn"
+                        onclick="showSectionByName('patients')">
+                    View Patients
+                </button>
+
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient</th>
+                            <th>Emergency</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="recentPatientsTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= REGISTRATION ================= -->
+
+    <section id="registration" class="section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="panel-label">PATIENT INTAKE</span>
+                <h2>Register Emergency Patient</h2>
+
+                <p>
+                    Enter patient details to add them to the emergency queue.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="form-panel">
+
+            <form id="patientForm">
+
+                <div class="form-section-title">
+                    👤 Personal Information
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="input-group">
+
+                        <label>Patient ID</label>
+
+                        <input
+                            type="text"
+                            id="patientId"
+                            placeholder="Example: P001"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Patient Name</label>
+
+                        <input
+                            type="text"
+                            id="patientName"
+                            placeholder="Enter patient name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Age</label>
+
+                        <input
+                            type="number"
+                            id="age"
+                            min="1"
+                            max="120"
+                            placeholder="Age"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Gender</label>
+
+                        <select id="gender" required>
+
+                            <option value="">Select Gender</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="10-digit phone number"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Blood Group</label>
+
+                        <select id="blood" required>
+
+                            <option value="">Select Blood Group</option>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                            <option>O+</option>
+                            <option>O-</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-section-title">
+                    🚨 Emergency Information
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="input-group">
+
+                        <label>Emergency Type</label>
+
+                        <select id="emergency" required>
+
+                            <option value="">Select Emergency</option>
+                            <option>Heart Attack</option>
+                            <option>Chest Pain</option>
+                            <option>Accident</option>
+                            <option>Fracture</option>
+                            <option>Injury</option>
+                            <option>Fever</option>
+                            <option>Other</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Priority</label>
+
+                        <select id="priority" required>
+
+                            <option value="">Select Priority</option>
+                            <option value="HIGH">HIGH</option>
+                            <option value="MEDIUM">MEDIUM</option>
+                            <option value="LOW">LOW</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>Arrival Time</label>
+
+                        <input
+                            type="time"
+                            id="arrivalTime"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="input-group full">
+
+                    <label>Symptoms / Description</label>
+
+                    <textarea
+                        id="symptom"
+                        rows="4"
+                        placeholder="Enter patient's symptoms or emergency description..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-buttons">
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        onclick="showSectionByName('dashboard')">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-btn">
+
+                        Register Patient →
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= PATIENTS ================= -->
+
+    <section id="patients" class="section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="panel-label">PATIENT DATABASE</span>
+                <h2>All Patients</h2>
+                <p>View and manage registered emergency patients.</p>
+            </div>
+
+            <button class="primary-btn"
+                    onclick="openRegistration()">
+                ＋ Register Patient
+            </button>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="search-box">
+
+                🔍
+
+                <input
+                    type="text"
+                    id="patientSearch"
+                    placeholder="Search by patient ID or name..."
+                    oninput="renderPatients()"
+                >
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient</th>
+                            <th>Emergency</th>
+                            <th>Priority</th>
+                            <th>Doctor</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="patientTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= PRIORITY ================= -->
+
+    <section id="priority" class="section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="panel-label">TRIAGE SYSTEM</span>
+                <h2>Emergency Priority Queue</h2>
+
+                <p>
+                    Patients are processed according to emergency severity.
+                </p>
+            </div>
+
+            <button class="primary-btn"
+                    onclick="processNextPatient()">
+
+                ⚡ Process Next Patient
+
+            </button>
+
+        </div>
+
+
+        <div class="priority-grid">
+
+            <div class="priority-panel high">
+
+                <div class="priority-title">
+
+                    <div>
+                        <span class="priority-dot"></span>
+                        HIGH PRIORITY
+                    </div>
+
+                    <strong id="highCount">0</strong>
+
+                </div>
+
+                <div id="highQueue"></div>
+
+            </div>
+
+
+            <div class="priority-panel medium">
+
+                <div class="priority-title">
+
+                    <div>
+                        <span class="priority-dot"></span>
+                        MEDIUM PRIORITY
+                    </div>
+
+                    <strong id="mediumCount">0</strong>
+
+                </div>
+
+                <div id="mediumQueue"></div>
+
+            </div>
+
+
+            <div class="priority-panel low">
+
+                <div class="priority-title">
+
+                    <div>
+                        <span class="priority-dot"></span>
+                        LOW PRIORITY
+                    </div>
+
+                    <strong id="lowCount">0</strong>
+
+                </div>
+
+                <div id="lowQueue"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= DOCTORS ================= -->
+
+    <section id="doctors" class="section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="panel-label">MEDICAL STAFF</span>
+                <h2>Doctor Availability</h2>
+
+                <p>
+                    Emergency doctor assignment and availability.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="doctor-grid">
+
+            <div class="doctor-card">
+
+                <div class="doctor-avatar">👨‍⚕️</div>
+
+                <div class="doctor-info">
+
+                    <h3>Dr. Kumar</h3>
+
+                    <span>Emergency Specialist</span>
+
+                    <div class="doctor-status">
+                        <i></i> Available
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="doctor-card">
+
+                <div class="doctor-avatar">👩‍⚕️</div>
+
+                <div class="doctor-info">
+
+                    <h3>Dr. Priya</h3>
+
+                    <span>Trauma Specialist</span>
+
+                    <div class="doctor-status">
+                        <i></i> Available
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="doctor-card">
+
+                <div class="doctor-avatar">👨‍⚕️</div>
+
+                <div class="doctor-info">
+
+                    <h3>Dr. Arun</h3>
+
+                    <span>General Physician</span>
+
+                    <div class="doctor-status">
+                        <i></i> Available
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= BEDS ================= -->
+
+    <section id="beds" class="section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="panel-label">HOSPITAL RESOURCES</span>
+                <h2>Bed Availability</h2>
+
+                <p>
+                    Real-time simulated emergency bed monitoring.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="bed-grid">
+
+            <div class="bed-card">
+
+                <div class="bed-icon">🛏</div>
+
+                <div>
+
+                    <h3>Emergency Ward</h3>
+
+                    <p>General emergency beds</p>
+
+                </div>
+
+                <div class="bed-number">
+
+                    <strong id="emergencyAvailable">8</strong>
+
+                    <span>Available</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="bed-card">
+
+                <div class="bed-icon">❤️</div>
+
+                <div>
+
+                    <h3>ICU</h3>
+
+                    <p>Critical care beds</p>
+
+                </div>
+
+                <div class="bed-number">
+
+                    <strong>3</strong>
+
+                    <span>Available</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="bed-card">
+
+                <div class="bed-icon">🚑</div>
+
+                <div>
+
+                    <h3>Observation</h3>
+
+                    <p>Short-term monitoring</p>
+
+                </div>
+
+                <div class="bed-number">
+
+                    <strong>5</strong>
+
+                    <span>Available</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="bed-visual">
+
+            <h3>Emergency Bed Occupancy</h3>
+
+            <div class="progress-container">
+
+                <div id="bedProgress"></div>
+
+            </div>
+
+            <div class="bed-progress-text">
+
+                <span>Occupied</span>
+                <strong id="occupiedBeds">4 / 12</strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ================= TOAST ================= -->
+
+<div id="toast" class="toast">
+
+    <span id="toastIcon">✓</span>
+
+    <div>
+        <strong id="toastTitle">Success</strong>
+        <p id="toastMessage">Operation completed.</p>
+    </div>
+
+</div>
+
+
+<!-- ================= EMERGENCY MODAL ================= -->
+
+<div id="emergencyModal" class="modal">
+
+    <div class="modal-box emergency-modal">
+
+        <div class="modal-icon">🚨</div>
+
+        <h2>Emergency Alert</h2>
+
+        <p>
+            Emergency response protocol has been activated.
+            Medical team has been notified.
+        </p>
+
+        <button
+            class="primary-btn"
+            onclick="closeEmergencyModal()">
+
+            Acknowledge Alert
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
